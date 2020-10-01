@@ -1,0 +1,21 @@
+<html>
+    <head>
+    </head>
+    <body>
+        <h1>All Urls !</h1>
+        {% for urlData in Urls %}
+        <div>
+            <p>Original Url:
+                {{ urlData[0] }}</b>
+            </p>
+            <p>Shorten Url: 
+                {{ urlData[1] }}</b>
+            </p>
+            <p>TimeStamp:  
+                {{ urlData[2] }}</b>
+            </p>
+            <br><p>-------------------------------------------------</p><br>
+        </div>
+        {% endfor %}
+    </body>
+</html>
