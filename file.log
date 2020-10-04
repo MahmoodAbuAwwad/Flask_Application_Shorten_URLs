@@ -1,0 +1,5 @@
+INFO:werkzeug:127.0.0.1 - - [04/Oct/2020 11:28:58] "[37mGET / HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Oct/2020 11:29:31] "[37mGET /getOrigin HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Oct/2020 11:29:33] "[37mGET /getShorten HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Oct/2020 11:29:35] "[37mGET /getURLS HTTP/1.1[0m" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/Oct/2020 11:29:37] "[37mGET /search HTTP/1.1[0m" 200 -

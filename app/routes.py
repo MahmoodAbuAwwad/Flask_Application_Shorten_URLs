@@ -1,18 +1,37 @@
 from app import app
 from flask import render_template,request,redirect, url_for
-from forms import GetShortenUrl,GetOriginUrl
+from forms import GetShortenUrl,GetOriginUrl,Search
+import logging
 import random
 import sqlite3
 from datetime import datetime
 
+def LogFunc(func):
+    def newFunc(Logged):
+        print request.url + " : " + str(Logged)
+        return func(Logged)
+    return newFunc
+
+
+@LogFunc
+def LogData(Logged):
+    return 'Logged Data {0}'.format(Logged)
+
+
 @app.route('/')
 def getHome():
+ 
+
+    LogData(logging.basicConfig(filename='file.log',level=logging.DEBUG))
     return render_template('base.html')
 
 @app.route('/getShorten', methods=["POST", "GET"])
 def getShorten():
+    LogData(logging.basicConfig(filename='file.log',level=logging.DEBUG))
     form=GetShortenUrl()
     if request.method =="POST":
+
+        
         origin_url = request.form['url']
         # Shorten Url Now 
         result_str = origin_url[10::5]
@@ -42,9 +61,7 @@ def getShorten():
         conn.commit()
         conn.close()
         
-        #append to file  origin and shorten url with timestamp
-        with open("logs.txt", "a") as logs:
-            logs.write('Original Url: ' + origin_url +'| shorten url: ' + shorten_url + '| at: ' + str(datetime.now()) +'\n' )
+         
 
         # then render to getUrl with extending with results
         return str(shorten_url)
@@ -56,6 +73,7 @@ def getShorten():
 #do API to get Origin Url of given Shorten URL
 @app.route('/getOrigin', methods=["POST", "GET"])
 def getOrigin():
+    LogData(logging.basicConfig(filename='file.log',level=logging.DEBUG))
     form=GetOriginUrl()
     if request.method =="POST":
         shorten_url = request.form['url']
@@ -80,6 +98,7 @@ def getOrigin():
 
 @app.route('/getURLS')
 def getURLS():
+    LogData(logging.basicConfig(filename='file.log',level=logging.DEBUG))
     conn = sqlite3.connect('urls.db')
     c = conn.cursor()
 
@@ -90,8 +109,28 @@ def getURLS():
 
     return render_template('AllUrls.html',  Urls= allUrls)
 
+@app.route('/search', methods=["POST", "GET"])
+def search():
+    LogData(logging.basicConfig(filename='file.log',level=logging.DEBUG))
 
-# do API to get all Shorten URLS and Origin Urls
-#API Should Provide Filtering, Pagination and Search
+    form=Search()
+    if request.method == "POST":
+        searched_text = request.form['search']
 
-######################################################
+        conn = sqlite3.connect('urls.db')
+        c = conn.cursor()
+
+        c.execute("SELECT origin,shorten,logStamp FROM urls WHERE origin = ? OR shorten=?",(searched_text,searched_text))
+        returned = c.fetchall()
+        conn.commit()
+        conn.close()
+
+        if len(returned)== 1:
+            for row in returned:
+                return "Origin URL = "+row[0] +'    Shorten= '+row[1]
+        else: 
+            return render_template('Error.html')
+    
+    else:
+        return render_template('search.html', form=form)
+ 

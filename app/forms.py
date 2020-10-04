@@ -8,3 +8,7 @@ class GetShortenUrl(FlaskForm):
 class GetOriginUrl(FlaskForm):
     url = StringField('Enter Your Shorten URL !!')
     submit = SubmitField('Submit')
+
+class Search(FlaskForm):
+    search = StringField('Enter Your URL !!')
+    submit = SubmitField('Submit') 
