@@ -8,7 +8,7 @@ from datetime import datetime
 
 def LogFunc(func):
     def newFunc(Logged):
-        print request.url + " : " + str(Logged)
+        print (request.url + " : " + str(Logged))
         return func(Logged)
     return newFunc
 
